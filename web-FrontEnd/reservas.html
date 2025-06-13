@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Reservas - Biblioteca</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --primary-green: #26b364;
+      --dark-green: #1c7c44;
+      --light-green: #e6f4ec;
+      --white: #fff;
+      --gray: #f2f2f2;
+      --gray-disabled: #bcbcbc;
+      --red: #e63946;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .container {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(38, 179, 100, 0.13);
+      width: 99vw;
+      max-width: 860px;
+      margin: 40px auto;
+      min-height: 500px;
+      padding: 2rem 2.5rem 2.2rem 2.5rem;
+      overflow: hidden;
+    }
+    h2 {
+      color: var(--primary-green);
+      text-align: center;
+      margin-bottom: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .logout-btn {
+      background: var(--primary-green);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.4rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      float: right;
+      margin-top: -2.2rem;
+      margin-bottom: 1.2rem;
+      transition: background 0.2s;
+    }
+    .logout-btn:hover {
+      background: var(--dark-green);
+    }
+    .reserva-section {
+      margin-bottom: 2.2rem;
+    }
+    .section-title {
+      margin-top: 1.2rem;
+      color: var(--dark-green);
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.7rem;
+    }
+    .reservas-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: flex-start;
+    }
+    .reserva-card {
+      border: 1px solid var(--gray);
+      border-radius: 10px;
+      background: var(--light-green);
+      padding: 1rem 1.1rem 1.1rem 1.1rem;
+      color: #263238;
+      font-size: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 240px;
+      max-width: 330px;
+      box-shadow: 0 2px 8px rgba(38, 179, 100, 0.09);
+      position: relative;
+    }
+    .reserva-card b { color: var(--primary-green); }
+    .estado-pendiente {
+      color: #fff;
+      background: var(--red);
+      border-radius: 7px;
+      padding: 0.2em 0.7em;
+      font-size: 1rem;
+      margin-top: 0.2em;
+      margin-bottom: 0.4em;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: inline-block;
+    }
+    .estado-devuelto {
+      color: #fff;
+      background: var(--primary-green);
+      border-radius: 7px;
+      padding: 0.2em 0.7em;
+      font-size: 1rem;
+      margin-top: 0.2em;
+      margin-bottom: 0.4em;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: inline-block;
+    }
+    .devolver-btn {
+      background: var(--primary-green);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.7rem;
+      width: 100%;
+      transition: background 0.2s;
+    }
+    .devolver-btn:hover {
+      background: var(--dark-green);
+    }
+    .devolver-btn[disabled] {
+      background: var(--gray-disabled);
+      color: #fff;
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+    .libro-detalle {
+      margin: 0.3rem 0 0.4rem 0.2rem;
+      color: #263238;
+      display: flex;
+      flex-direction: column;
+      gap: 0.10rem;
+      font-size: 0.98rem;
+    }
+    .message {
+      color: var(--primary-green);
+      font-size: 1.12rem;
+      font-weight: 500;
+      text-align: center;
+      margin-top: 1rem;
+      margin-bottom: 1.6rem;
+    }
+    .error-message {
+      color: var(--red);
+      text-align: center;
+      margin-top: 1rem;
+      margin-bottom: 1.6rem;
+    }
+    .volver-btn {
+      background: var(--primary-green);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 1.2rem;
+      margin-right: 1.2rem;
+      transition: background 0.2s;
+    }
+    .volver-btn:hover {
+      background: var(--dark-green);
+    }
+    @media (max-width: 600px) {
+      .container { padding: 1.1rem; }
+      .reserva-card { min-width: 95vw; max-width: 98vw; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    <button class="volver-btn" onclick="window.location='index.html'">Volver a libros</button>
+    <h2>Mis Reservas</h2>
+    <div id="pendientes-section" class="reserva-section">
+      <div class="section-title">Reservas Pendientes</div>
+      <div id="pendientes-list" class="reservas-list"></div>
+      <div id="pendientes-msg" class="message"></div>
+    </div>
+    <div id="antiguas-section" class="reserva-section">
+      <div class="section-title">Reservas Antiguas</div>
+      <div id="antiguas-list" class="reservas-list"></div>
+      <div id="antiguas-msg" class="message"></div>
+    </div>
+    <div id="error-msg" class="error-message"></div>
+  </div>
+  <script>
+    const API_URL = "http://localhost:8080";
+    if (localStorage.getItem('validador') !== 'positivo' || !localStorage.getItem('usuarioId')) {
+      window.location.href = 'auth.html';
+    }
+
+    function logout() {
+      localStorage.setItem('validador', 'negativo');
+      localStorage.removeItem('usuarioId');
+      localStorage.removeItem('usuarioNombre');
+      window.location.href = 'auth.html';
+    }
+
+    function cargarReservas() {
+      const usuarioId = localStorage.getItem('usuarioId');
+      if (!usuarioId) {
+        logout();
+        return;
+      }
+      document.getElementById('pendientes-list').innerHTML = '';
+      document.getElementById('antiguas-list').innerHTML = '';
+      document.getElementById('pendientes-msg').textContent = '';
+      document.getElementById('antiguas-msg').textContent = '';
+      document.getElementById('error-msg').textContent = '';
+
+      fetch(API_URL + "/api/reservas/usuario/" + usuarioId)
+        .then(res => {
+          if (!res.ok) throw new Error("Error al obtener reservas");
+          return res.json();
+        })
+        .then(reservas => {
+          let pendientes = [];
+          let antiguas = [];
+          reservas.forEach(reserva => {
+            if (reserva.estado === "PENDIENTE" || reserva.estado === "ATRASADO") {
+              pendientes.push(reserva);
+            } else {
+              antiguas.push(reserva);
+            }
+          });
+
+          renderReservas(pendientes, 'pendientes-list', true);
+          renderReservas(antiguas, 'antiguas-list', false);
+
+          if (!pendientes.length) {
+            document.getElementById('pendientes-msg').textContent = "No tienes reservas pendientes por devolver.";
+          }
+          if (!antiguas.length) {
+            document.getElementById('antiguas-msg').textContent = "No tienes reservas antiguas.";
+          }
+        })
+        .catch(() => {
+          document.getElementById('error-msg').textContent = "No se pudieron cargar las reservas. Intenta de nuevo.";
+        });
+    }
+
+    function renderReservas(reservas, listId, esPendiente) {
+      const lista = document.getElementById(listId);
+      lista.innerHTML = '';
+      reservas.forEach(reserva => {
+        let detallesHtml = '';
+        if (reserva.detalles && reserva.detalles.length) {
+          detallesHtml = reserva.detalles.map(det => `
+            <div>
+              <span><b>Libro:</b> ${det.tituloLibro}</span>
+              <span style="color:#666;">(ID: ${det.libroId})</span>
+            </div>
+          `).join('');
+        } else {
+          detallesHtml = '<div style="color:#999;">Sin detalles de libro.</div>';
+        }
+        let estadoHtml = reserva.estado === 'PENDIENTE' || reserva.estado === 'ATRASADO'
+          ? `<span class="estado-pendiente">${reserva.estado}</span>`
+          : `<span class="estado-devuelto">${reserva.estado}</span>`;
+        let fechasHtml = `
+          <div><b>Fecha reserva:</b> ${reserva.fechaReserva || '-'}</div>
+          <div><b>Fecha devolución prevista:</b> ${reserva.fechaDevolucion || '-'}</div>
+          <div><b>Fecha devolución real:</b> ${reserva.fechaDevolucionReal || '-'}</div>
+        `;
+        let btnHtml = '';
+        if (esPendiente) {
+          btnHtml = `<button class="devolver-btn" onclick="devolverReserva(${reserva.id}, this)">Devolver</button>`;
+        }
+        lista.innerHTML += `
+          <div class="reserva-card" id="reserva-${reserva.id}">
+            <div><b>Reserva ID:</b> ${reserva.id}</div>
+            ${estadoHtml}
+            ${fechasHtml}
+            <div class="libro-detalle">${detallesHtml}</div>
+            ${btnHtml}
+          </div>
+        `;
+      });
+    }
+
+    function devolverReserva(reservaId, btn) {
+      if (!confirm("¿Estás seguro de que quieres devolver esta reserva?")) return;
+      btn.disabled = true;
+      fetch(API_URL + "/api/reservas/" + reservaId + "/devolver", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: "{}"
+      })
+        .then(res => {
+          if (!res.ok) throw new Error("No se pudo devolver la reserva");
+          return res.json().catch(() => ({}));
+        })
+        .then(() => {
+          document.getElementById('reserva-' + reservaId).remove();
+          cargarReservas();
+        })
+        .catch(() => {
+          btn.disabled = false;
+          alert("Error al devolver la reserva. Intenta nuevamente.");
+        });
+    }
+
+    // Inicializar al cargar
+    window.onload = cargarReservas;
+  </script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Acceso Biblioteca</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --primary-green: #26b364;
+      --dark-green: #1c7c44;
+      --light-green: #e6f4ec;
+      --white: #fff;
+      --gray: #f2f2f2;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .auth-container {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(38, 179, 100, 0.13);
+      width: 370px;
+      padding: 2.5rem 2.2rem 2rem 2.2rem;
+      transition: box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-container h2 {
+      margin: 0 0 1.4rem 0;
+      color: var(--primary-green);
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+    .auth-form input, .auth-form select {
+      padding: 0.8rem;
+      border-radius: 9px;
+      border: 1px solid var(--gray);
+      background: var(--light-green);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .auth-form input:focus, .auth-form select:focus {
+      border-color: var(--primary-green);
+    }
+    .auth-form button {
+      padding: 0.9rem;
+      border: none;
+      border-radius: 9px;
+      background: var(--primary-green);
+      color: var(--white);
+      font-size: 1.08rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px rgba(38, 179, 100, 0.09);
+      cursor: pointer;
+      margin-top: 0.2rem;
+      transition: background 0.2s;
+    }
+    .auth-form button:hover {
+      background: var(--dark-green);
+    }
+    .toggle-link {
+      text-align: center;
+      color: var(--primary-green);
+      font-size: 0.98rem;
+      margin-top: 1.7rem;
+      cursor: pointer;
+      text-decoration: underline;
+      transition: color 0.15s;
+      display: block;
+    }
+    .toggle-link:hover {
+      color: var(--dark-green);
+    }
+    .auth-error {
+      color: #e63946;
+      font-size: 0.96rem;
+      text-align: center;
+      margin-bottom: -0.3rem;
+      margin-top: -0.5rem;
+      min-height: 1.2em;
+    }
+    .success {
+      color: var(--primary-green);
+      font-size: 0.98rem;
+      text-align: center;
+      margin-bottom: -0.3rem;
+      margin-top: -0.5rem;
+    }
+    /* Animation for switching forms */
+    .fade-in {
+      animation: fadeIn 0.45s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <!-- LOGIN FORM -->
+    <div id="login-view" class="fade-in">
+      <h2>Iniciar Sesión</h2>
+      <form id="login-form" class="auth-form" autocomplete="off">
+        <input type="text" name="usuario" placeholder="Correo o usuario" required>
+        <input type="password" name="contraseña" placeholder="Contraseña" required>
+        <div id="login-error" class="auth-error"></div>
+        <button type="submit">Entrar</button>
+      </form>
+      <span class="toggle-link" onclick="switchView('register-view')">
+        ¿No tienes cuenta? <b>Regístrate aquí</b>
+      </span>
+    </div>
+    <!-- REGISTRATION FORM -->
+    <div id="register-view" style="display:none">
+      <h2>Registro</h2>
+      <form id="register-form" class="auth-form" autocomplete="off">
+        <input type="text" name="nombre" placeholder="Nombre" required>
+        <input type="text" name="apellido" placeholder="Apellido" required>
+        <input type="email" name="correo" placeholder="Correo electrónico" required>
+        <input type="text" name="dni" placeholder="DNI" required>
+        <input type="password" name="contraseña" placeholder="Contraseña" required>
+        <select name="rol" required>
+          <option value="" disabled selected>Selecciona rol</option>
+          <option value="USER">Usuario</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+        <div id="register-error" class="auth-error"></div>
+        <div id="register-success" class="success"></div>
+        <button type="submit">Registrarse</button>
+      </form>
+      <span class="toggle-link" onclick="switchView('login-view')">
+        ¿Ya tienes cuenta? <b>Inicia sesión</b>
+      </span>
+    </div>
+  </div>
+  <script>
+    // Cambiar entre login y registro con animación
+    function switchView(view) {
+      document.getElementById('login-view').style.display = 'none';
+      document.getElementById('register-view').style.display = 'none';
+      if (view === 'login-view') {
+        document.getElementById('login-view').classList.add('fade-in');
+        document.getElementById('login-view').style.display = 'block';
+      } else {
+        document.getElementById('register-view').classList.add('fade-in');
+        document.getElementById('register-view').style.display = 'block';
+      }
+      setTimeout(() => {
+        document.getElementById('login-view').classList.remove('fade-in');
+        document.getElementById('register-view').classList.remove('fade-in');
+      }, 500);
+    }
+
+    // LOGIN
+    document.getElementById('login-form').onsubmit = async function(e) {
+      e.preventDefault();
+      const usuario = e.target.usuario.value;
+      const contraseña = e.target.contraseña.value;
+      const errorDiv = document.getElementById('login-error');
+      errorDiv.textContent = "";
+      try {
+        const res = await fetch('http://localhost:8080/api/usuarios/login', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({usuario, contraseña})
+        });
+        if (res.ok) {
+          const data = await res.json();
+          // Guarda el id en localStorage
+          localStorage.setItem('usuarioId', data.id);
+          localStorage.setItem('usuarioNombre', data.nombre);
+          // Pon el validador en positivo
+          localStorage.setItem('validador', 'positivo');
+          // Redirige o muestra mensaje
+          window.location.href = "index.html"; // Cambia por la página principal real
+        } else {
+          const error = await res.json();
+          errorDiv.textContent = error.mensaje || "Usuario o contraseña incorrectos";
+        }
+      } catch {
+        errorDiv.textContent = "No se pudo conectar con el servidor";
+      }
+    };
+
+    // REGISTRO
+    document.getElementById('register-form').onsubmit = async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const errorDiv = document.getElementById('register-error');
+      const successDiv = document.getElementById('register-success');
+      errorDiv.textContent = "";
+      successDiv.textContent = "";
+      const body = {
+        nombre: form.nombre.value,
+        apellido: form.apellido.value,
+        correo: form.correo.value,
+        dni: form.dni.value,
+        contraseña: form.contraseña.value,
+        rol: form.rol.value
+      };
+      try {
+        const res = await fetch('http://localhost:8080/api/usuarios', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(body)
+        });
+        if (res.ok) {
+          successDiv.textContent = "¡Registro exitoso! Ahora puedes iniciar sesión.";
+          setTimeout(() => {
+            switchView('login-view');
+            successDiv.textContent = "";
+            form.reset();
+          }, 1100);
+        } else {
+          const error = await res.json();
+          errorDiv.textContent = error.mensaje || "No se pudo registrar el usuario";
+        }
+      } catch {
+        errorDiv.textContent = "No se pudo conectar con el servidor";
+      }
+    };
+
+    // Al cargar, limpiar localStorage y mostrar login
+    window.onload = () => {
+      // Si quieres mantener la sesión, puedes omitir esto
+      localStorage.removeItem('usuarioId');
+      localStorage.removeItem('usuarioNombre');
+      localStorage.setItem('validador', 'negativo'); // Siempre empieza en negativo
+      switchView('login-view');
+    }
+  </script>
+</body>
+</html>

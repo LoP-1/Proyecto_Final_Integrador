@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Biblioteca - Libros</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --primary-green: #26b364;
+      --dark-green: #1c7c44;
+      --light-green: #e6f4ec;
+      --white: #fff;
+      --gray: #f2f2f2;
+      --gray-disabled: #bcbcbc;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .container {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(38, 179, 100, 0.13);
+      width: 99vw;
+      max-width: 860px;
+      margin: 40px auto;
+      min-height: 500px;
+      padding: 2rem 2.5rem 2.2rem 2.5rem;
+      overflow: hidden;
+    }
+    h2 {
+      color: var(--primary-green);
+      text-align: center;
+      margin-bottom: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .logout-btn {
+      background: var(--primary-green);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.4rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      float: right;
+      margin-top: -2.2rem;
+      margin-bottom: 1.2rem;
+      transition: background 0.2s;
+    }
+    .logout-btn:hover {
+      background: var(--dark-green);
+    }
+    .reservas-btn {
+      background: var(--primary-green);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 1.2rem;
+      margin-right: 1.2rem;
+      transition: background 0.2s;
+    }
+    .reservas-btn:hover {
+      background: var(--dark-green);
+    }
+    .libro-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.4rem;
+      justify-content: center;
+      margin-bottom: 2.2rem;
+    }
+    .libro-card {
+      background: var(--light-green);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(38, 179, 100, 0.09);
+      width: 220px;
+      padding: 1.1rem 1rem 1.2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      transition: box-shadow 0.2s;
+    }
+    .libro-card img {
+      max-width: 100px;
+      max-height: 140px;
+      border-radius: 6px;
+      margin-bottom: 0.8rem;
+      background: #e7e7e7;
+      object-fit: cover;
+    }
+    .libro-title {
+      font-weight: 600;
+      color: var(--dark-green);
+      text-align: center;
+      font-size: 1.07rem;
+      margin-bottom: 0.45rem;
+      min-height: 2.1em;
+    }
+    .libro-desc {
+      font-size: 0.98rem;
+      color: #494949;
+      margin-bottom: 0.6rem;
+      min-height: 2.7em;
+      text-align: center;
+    }
+    .libro-meta {
+      color: #666;
+      font-size: 0.92rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .seleccionar-btn {
+      background: var(--primary-green);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.1rem;
+      font-size: 0.98rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.4rem;
+    }
+    .seleccionar-btn[disabled], .seleccionar-btn.disabled {
+      background: var(--gray-disabled);
+      color: #fff;
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+    .estado-pendiente {
+      color: #fff;
+      background: #e63946;
+      border-radius: 7px;
+      padding: 0.2em 0.7em;
+      font-size: 0.935rem;
+      margin-top: 0.2em;
+      margin-bottom: 0.4em;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .estado-disponible {
+      color: #fff;
+      background: var(--primary-green);
+      border-radius: 7px;
+      padding: 0.2em 0.7em;
+      font-size: 0.935rem;
+      margin-top: 0.2em;
+      margin-bottom: 0.4em;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    /* Reserva Modal */
+    .modal-bg {
+      position: fixed;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(44, 44, 44, 0.27);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .modal {
+      background: var(--white);
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(38, 179, 100, 0.22);
+      padding: 2rem 2.1rem 1.6rem 2.1rem;
+      min-width: 320px;
+      min-height: 140px;
+      max-width: 90vw;
+      position: relative;
+    }
+    .modal h3 {
+      color: var(--primary-green);
+      margin-top: 0;
+      text-align: center;
+    }
+    .close-modal {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 1.4rem;
+      color: #888;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.13s;
+    }
+    .close-modal:hover { color: #d32f2f; }
+    .reserva-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .reserva-form input[type="date"] {
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: 1px solid var(--gray);
+      background: var(--light-green);
+      font-size: 1rem;
+      outline: none;
+    }
+    .reserva-form button {
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--primary-green);
+      color: var(--white);
+      font-size: 1.04rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .reserva-form button:hover {
+      background: var(--dark-green);
+    }
+    .modal-error, .modal-success {
+      color: #e63946;
+      font-size: 0.98rem;
+      text-align: center;
+      min-height: 1.2em;
+      margin-bottom: -0.2rem;
+    }
+    .modal-success { color: var(--primary-green); }
+    @media (max-width: 600px) {
+      .container { padding: 1.1rem; }
+      .libro-card { width: 95vw; min-width: 0; }
+      .modal { padding: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    <button class="reservas-btn" onclick="window.location='reservas.html'">Mis Reservas</button>
+    <h2>Listado de Libros</h2>
+    <div id="libro-list" class="libro-list"></div>
+  </div>
+  <!-- Modal para reserva -->
+  <div id="modal-bg" class="modal-bg" style="display:none;">
+    <div class="modal" id="modal-content">
+      <button class="close-modal" onclick="closeModal()">&times;</button>
+      <div id="modal-inner-content"></div>
+    </div>
+  </div>
+  <script>
+    const API_URL = "http://localhost:8080";
+    // ----------- Autenticación simple con validador en localStorage -----------
+    if (localStorage.getItem('validador') !== 'positivo' || !localStorage.getItem('usuarioId')) {
+      window.location.href = 'auth.html';
+    }
+
+    function logout() {
+      localStorage.setItem('validador', 'negativo');
+      localStorage.removeItem('usuarioId');
+      localStorage.removeItem('usuarioNombre');
+      window.location.href = 'auth.html';
+    }
+
+    // ----------- Mostrar Libros -----------
+    const libroList = document.getElementById('libro-list');
+    let librosGlobal = [];
+    fetch(API_URL + '/api/libros')
+      .then(res => res.json())
+      .then(libros => {
+        librosGlobal = libros;
+        libroList.innerHTML = '';
+        if (!libros.length) {
+          libroList.innerHTML = "<p style='text-align:center;width:100%'>No hay libros disponibles.</p>";
+          return;
+        }
+        libros.forEach(libro => {
+          let estado = libro.estado || (libro.disponibilidad === false ? "PENDIENTE" : "DISPONIBLE");
+          let estadoHtml = estado === "PENDIENTE"
+            ? `<div class="estado-pendiente">PENDIENTE</div>`
+            : `<div class="estado-disponible">DISPONIBLE</div>`;
+          libroList.innerHTML += `
+            <div class="libro-card">
+              <img src="${libro.portada || 'https://via.placeholder.com/100x140?text=Sin+portada'}" alt="portada">
+              <div class="libro-title">${libro.titulo}</div>
+              <div class="libro-desc">${libro.descripcion || ''}</div>
+              <div class="libro-meta">ID: ${libro.id} | ${libro.tipo || ''}</div>
+              ${estadoHtml}
+              <button class="seleccionar-btn"
+                onclick="abrirReserva(${libro.id})"
+                ${estado === "PENDIENTE" ? 'disabled class="disabled seleccionar-btn"' : ''}>
+                Reservar
+              </button>
+            </div>
+          `;
+        });
+      })
+      .catch(() => {
+        libroList.innerHTML = "<p style='color:#e63946;text-align:center;'>Error al cargar libros</p>";
+      });
+
+    // ----------- Reserva Modal -----------
+    let libroSeleccionadoId = null;
+    function abrirReserva(libroId) {
+      libroSeleccionadoId = libroId;
+      const libro = librosGlobal.find(l => l.id === libroId);
+      document.getElementById('modal-inner-content').innerHTML = `
+        <h3>Reservar Libro</h3>
+        <div id="modal-libro-info">
+          <b>${libro.titulo}</b><br>
+          <small>ID: ${libro.id}</small><br>
+          <span>${libro.descripcion || ''}</span>
+        </div>
+        <form id="reserva-form" class="reserva-form">
+          <input type="date" name="fechaDevolucion" min="" required>
+          <div id="modal-error" class="modal-error"></div>
+          <div id="modal-success" class="modal-success"></div>
+          <button type="submit">Confirmar Reserva</button>
+        </form>
+      `;
+      document.getElementById('modal-bg').style.display = 'flex';
+      setTimeout(() => {
+        document.querySelector('#reserva-form input[type="date"]').value = '';
+        document.querySelector('#reserva-form input[type="date"]').min = new Date().toISOString().split('T')[0];
+        document.getElementById('modal-error').textContent = "";
+        document.getElementById('modal-success').textContent = "";
+        document.getElementById('reserva-form').onsubmit = async function(e) {
+          e.preventDefault();
+          const usuarioId = localStorage.getItem('usuarioId');
+          if (!usuarioId) {
+            document.getElementById('modal-error').textContent = "Error: sesión expirada, vuelva a iniciar sesión";
+            return;
+          }
+          const fechaDevolucion = e.target.fechaDevolucion.value;
+          if (!fechaDevolucion) {
+            document.getElementById('modal-error').textContent = "Seleccione una fecha de devolución";
+            return;
+          }
+          document.getElementById('modal-error').textContent = "";
+          document.getElementById('modal-success').textContent = "";
+          try {
+            const res = await fetch(API_URL + '/api/reservas', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                usuarioId: parseInt(usuarioId),
+                fechaDevolucion,
+                librosIds: [libroSeleccionadoId]
+              })
+            });
+            if (res.ok) {
+              document.getElementById('modal-success').textContent = "¡Reserva exitosa!";
+              setTimeout(() => {
+                closeModal();
+              }, 1200);
+            } else {
+              const errJson = await res.json();
+              document.getElementById('modal-error').textContent = errJson.mensaje || "No se pudo reservar el libro";
+            }
+          } catch {
+            document.getElementById('modal-error').textContent = "Error de conexión";
+          }
+        };
+      }, 50);
+    }
+    function closeModal() {
+      document.getElementById('modal-bg').style.display = 'none';
+      document.getElementById('modal-inner-content').innerHTML = '';
+      libroSeleccionadoId = null;
+    }
+    document.getElementById('modal-bg').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+  </script>
+</body>
+</html>

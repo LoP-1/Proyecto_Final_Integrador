@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CRUD Libros - Biblioteca</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --primary-green: #26b364;
+      --dark-green: #1c7c44;
+      --light-green: #e6f4ec;
+      --white: #fff;
+      --gray: #f2f2f2;
+      --gray-disabled: #bcbcbc;
+      --red: #e63946;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .container {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(38, 179, 100, 0.13);
+      width: 99vw;
+      max-width: 990px;
+      margin: 40px auto;
+      min-height: 500px;
+      padding: 2rem 2.5rem 2.2rem 2.5rem;
+      overflow: hidden;
+    }
+    h2 {
+      color: var(--primary-green);
+      text-align: center;
+      margin-bottom: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .action-btn {
+      background: var(--primary-green);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 1.2rem;
+      margin-right: 1.2rem;
+      transition: background 0.2s;
+    }
+    .action-btn:hover {
+      background: var(--dark-green);
+    }
+    .crud-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2.5rem;
+    }
+    .crud-table th, .crud-table td {
+      border: 1px solid var(--gray);
+      padding: 0.7rem 0.5rem;
+      text-align: left;
+      font-size: 1rem;
+    }
+    .crud-table th {
+      background: var(--light-green);
+      color: var(--primary-green);
+      font-weight: 700;
+    }
+    .crud-table td {
+      background: #fff;
+      color: #263238;
+      vertical-align: top;
+    }
+    .crud-table tr:nth-child(even) td {
+      background: #f7faf7;
+    }
+    .edit-btn, .delete-btn {
+      padding: 0.35rem 0.9rem;
+      border-radius: 7px;
+      font-weight: 600;
+      font-size: 0.98rem;
+      border: none;
+      cursor: pointer;
+      margin-right: 0.3rem;
+      transition: background 0.16s;
+    }
+    .edit-btn {
+      background: var(--primary-green);
+      color: #fff;
+    }
+    .edit-btn:hover {
+      background: var(--dark-green);
+    }
+    .delete-btn {
+      background: var(--red);
+      color: #fff;
+    }
+    .delete-btn:hover {
+      background: #a12832;
+    }
+    .crud-form-section {
+      background: var(--light-green);
+      border-radius: 12px;
+      padding: 1.3rem 1.4rem 1.2rem 1.4rem;
+      margin-bottom: 1.6rem;
+      max-width: 550px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .crud-form-section h3 {
+      margin-top: 0;
+      color: var(--primary-green);
+      text-align: center;
+      margin-bottom: 0.8rem;
+    }
+    .crud-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+    .crud-form label {
+      font-weight: 600;
+      color: var(--dark-green);
+      margin-bottom: 0.2rem;
+    }
+    .crud-form input[type="text"],
+    .crud-form input[type="url"],
+    .crud-form select,
+    .crud-form textarea {
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: 1px solid var(--gray);
+      background: var(--white);
+      font-size: 1rem;
+      outline: none;
+    }
+    .crud-form textarea {
+      min-height: 50px;
+      max-height: 160px;
+      resize: vertical;
+    }
+    .crud-form .form-row {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .crud-form .form-row > * {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+    .crud-form .form-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 0.7rem;
+    }
+    .success-msg, .error-msg {
+      text-align: center;
+      font-size: 1.06rem;
+      margin-top: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .success-msg { color: var(--primary-green); }
+    .error-msg { color: var(--red); }
+    .multi-select-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.18rem 0.6rem;
+      margin: 0.3rem 0 0.6rem 0;
+    }
+    .chip {
+      background: var(--primary-green);
+      color: #fff;
+      border-radius: 14px;
+      padding: 0.2em 0.8em 0.2em 0.8em;
+      font-size: 0.97rem;
+      margin-right: 0.23rem;
+      margin-bottom: 0.2rem;
+      display: inline-block;
+    }
+    /* Aux form */
+    .aux-form-section {
+      background: var(--light-green);
+      border-radius: 12px;
+      padding: 1.2rem 1.2rem 1rem 1.2rem;
+      margin-bottom: 1.6rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .aux-form-section h4 {
+      color: var(--primary-green);
+      text-align: center;
+      margin-top: 0.2em;
+      margin-bottom: 0.8em;
+    }
+    .aux-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem 2.2rem;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .aux-form label {
+      font-weight: 600;
+      color: var(--dark-green);
+      margin-right: 0.4em;
+    }
+    .aux-form input[type="text"] {
+      padding: 0.5rem;
+      border-radius: 7px;
+      border: 1px solid var(--gray);
+      background: var(--white);
+      font-size: 1rem;
+      outline: none;
+      min-width: 160px;
+      margin-right: 0.7em;
+    }
+    .aux-btn {
+      padding: 0.45rem 1.1rem;
+      background: var(--primary-green);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 0.4em;
+      transition: background 0.2s;
+    }
+    .aux-btn:hover {
+      background: var(--dark-green);
+    }
+    @media (max-width: 700px) {
+      .container { padding: 1.1rem; }
+      .crud-form-section { padding: 1rem 0.5rem; }
+      .crud-table th, .crud-table td { font-size: 0.95rem; padding: 0.4rem 0.2rem; }
+      .aux-form-section { padding: 0.8em 0.2em; }
+      .aux-form { gap: 0.7em 0.2em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>CRUD de Libros</h2>
+
+    <!-- Formulario CRUD -->
+    <div class="crud-form-section">
+      <h3 id="form-title">Agregar Libro</h3>
+      <form id="crud-form" class="crud-form">
+        <div class="form-row">
+          <label for="titulo">Título</label>
+          <input type="text" id="titulo" name="titulo" required>
+        </div>
+        <div class="form-row">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" name="descripcion"></textarea>
+        </div>
+        <div class="form-row">
+          <label for="portada">Portada (URL)</label>
+          <input type="url" id="portada" name="portada">
+        </div>
+        <div class="form-row">
+          <label for="disponibilidad">¿Disponible?</label>
+          <select id="disponibilidad" name="disponibilidad" required>
+            <option value="true">Sí</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="tipo">Tipo</label>
+          <input type="text" id="tipo" name="tipo">
+        </div>
+        <div class="form-row">
+          <label for="categoriaId">Categoría</label>
+          <select id="categoriaId" name="categoriaId" required>
+            <option value="">Cargando...</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="editorialId">Editorial</label>
+          <select id="editorialId" name="editorialId" required>
+            <option value="">Cargando...</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="autoresIds">Autores</label>
+          <select id="autoresIds" name="autoresIds" multiple required style="min-height:60px;"></select>
+        </div>
+        <div class="form-actions">
+          <button class="action-btn" type="submit" id="submit-btn">Agregar</button>
+          <button class="action-btn" type="button" id="cancel-btn" style="display:none;">Cancelar</button>
+        </div>
+        <div id="form-msg" class="success-msg" style="display:none;"></div>
+        <div id="form-err" class="error-msg" style="display:none;"></div>
+      </form>
+    </div>
+
+    <!-- Formulario para agregar auxiliares -->
+    <div class="aux-form-section">
+      <h4>Agregar Autor, Editorial o Categoría</h4>
+      <form id="aux-form" class="aux-form" autocomplete="off">
+        <div>
+          <label for="autor-nombre">Autor</label>
+          <input type="text" id="autor-nombre" placeholder="Nombre autor">
+          <button type="button" class="aux-btn" onclick="agregarAux('autor')">Agregar</button>
+        </div>
+        <div>
+          <label for="editorial-nombre">Editorial</label>
+          <input type="text" id="editorial-nombre" placeholder="Nombre editorial">
+          <button type="button" class="aux-btn" onclick="agregarAux('editorial')">Agregar</button>
+        </div>
+        <div>
+          <label for="categoria-nombre">Categoría</label>
+          <input type="text" id="categoria-nombre" placeholder="Nombre categoría">
+          <button type="button" class="aux-btn" onclick="agregarAux('categoria')">Agregar</button>
+        </div>
+      </form>
+      <div id="aux-msg" class="success-msg" style="display:none;"></div>
+      <div id="aux-err" class="error-msg" style="display:none;"></div>
+    </div>
+
+    <!-- Tabla listado -->
+    <div>
+      <table class="crud-table" id="libros-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Portada</th>
+            <th>Disponible</th>
+            <th>Tipo</th>
+            <th>Categoría</th>
+            <th>Editorial</th>
+            <th>Autores</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="libros-tbody">
+          <!-- Libros aquí -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    const API_URL = "http://localhost:8080/api";
+    let categorias = [], editoriales = [], autores = [];
+    let editLibroId = null;
+
+    // --------- Cargar opciones (solo GET) ---------
+    function cargarOpcionesAuxiliares() {
+      // Categorías
+      fetch(API_URL + "/categorias")
+        .then(r => r.json()).then(data => {
+          categorias = data;
+          const catSel = document.getElementById('categoriaId');
+          catSel.innerHTML = '';
+          if (!categorias.length) {
+            catSel.innerHTML = '<option value="">Sin categorías</option>';
+          } else {
+            catSel.innerHTML = '<option value="">Seleccione</option>';
+            categorias.forEach(c => {
+              catSel.innerHTML += `<option value="${c.id}">${c.nombre}</option>`;
+            });
+          }
+        });
+      // Editoriales
+      fetch(API_URL + "/editoriales")
+        .then(r => r.json()).then(data => {
+          editoriales = data;
+          const ediSel = document.getElementById('editorialId');
+          ediSel.innerHTML = '';
+          if (!editoriales.length) {
+            ediSel.innerHTML = '<option value="">Sin editoriales</option>';
+          } else {
+            ediSel.innerHTML = '<option value="">Seleccione</option>';
+            editoriales.forEach(e => {
+              ediSel.innerHTML += `<option value="${e.id}">${e.nombre}</option>`;
+            });
+          }
+        });
+      // Autores
+      fetch(API_URL + "/autores")
+        .then(r => r.json()).then(data => {
+          autores = data;
+          const autorSel = document.getElementById('autoresIds');
+          autorSel.innerHTML = '';
+          if (!autores.length) {
+            autorSel.innerHTML = '<option value="">Sin autores</option>';
+          } else {
+            autores.forEach(a => {
+              autorSel.innerHTML += `<option value="${a.id}">${a.nombre}</option>`;
+            });
+          }
+        });
+    }
+
+    // --------- Listar libros ---------
+    function listarLibros() {
+      fetch(API_URL + "/libros")
+        .then(r => r.json())
+        .then(libros => {
+          const tbody = document.getElementById('libros-tbody');
+          tbody.innerHTML = '';
+          libros.forEach(libro => {
+            tbody.innerHTML += `
+              <tr>
+                <td>${libro.id}</td>
+                <td>${libro.titulo}</td>
+                <td>${libro.descripcion || ''}</td>
+                <td>
+                  ${libro.portada ? `<img src="${libro.portada}" alt="portada" style="max-width:40px;max-height:50px;">` : ''}
+                </td>
+                <td>${libro.disponibilidad ? 'Sí' : 'No'}</td>
+                <td>${libro.tipo || ''}</td>
+                <td>${libro.categoriaNombre || ''}</td>
+                <td>${libro.editorialNombre || ''}</td>
+                <td>
+                  <div class="multi-select-list">
+                    ${(libro.autoresNombres || []).map(n => `<span class="chip">${n}</span>`).join('')}
+                  </div>
+                </td>
+                <td>
+                  <button class="edit-btn" onclick="cargarEdicion(${libro.id})">Editar</button>
+                  <button class="delete-btn" onclick="eliminarLibro(${libro.id})">Eliminar</button>
+                </td>
+              </tr>
+            `;
+          });
+        });
+    }
+
+    // --------- Formulario libro: crear/editar ---------
+    document.getElementById('crud-form').onsubmit = function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        titulo: form.titulo.value,
+        descripcion: form.descripcion.value,
+        portada: form.portada.value,
+        disponibilidad: form.disponibilidad.value === "true",
+        tipo: form.tipo.value,
+        categoriaId: parseInt(form.categoriaId.value),
+        editorialId: parseInt(form.editorialId.value),
+        autoresIds: Array.from(form.autoresIds.selectedOptions).map(opt => parseInt(opt.value))
+      };
+      document.getElementById('form-msg').style.display = "none";
+      document.getElementById('form-err').style.display = "none";
+      if (!data.titulo || !data.categoriaId || !data.editorialId || !data.autoresIds.length) {
+        document.getElementById('form-err').textContent = "Completa todos los campos obligatorios.";
+        document.getElementById('form-err').style.display = "block";
+        return;
+      }
+      if (editLibroId) {
+        // PUT
+        fetch(API_URL + "/libros/" + editLibroId, {
+          method: "PUT",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(data)
+        })
+        .then(r => {
+          if (!r.ok) throw new Error();
+          return r.json();
+        })
+        .then(() => {
+          document.getElementById('form-msg').textContent = "Libro actualizado correctamente";
+          document.getElementById('form-msg').style.display = "block";
+          listarLibros();
+          resetForm();
+        })
+        .catch(() => {
+          document.getElementById('form-err').textContent = "No se pudo actualizar el libro";
+          document.getElementById('form-err').style.display = "block";
+        });
+      } else {
+        // POST
+        fetch(API_URL + "/libros", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(data)
+        })
+        .then(r => {
+          if (!r.ok) throw new Error();
+          return r.json();
+        })
+        .then(() => {
+          document.getElementById('form-msg').textContent = "Libro agregado correctamente";
+          document.getElementById('form-msg').style.display = "block";
+          listarLibros();
+          resetForm();
+        })
+        .catch(() => {
+          document.getElementById('form-err').textContent = "No se pudo agregar el libro";
+          document.getElementById('form-err').style.display = "block";
+        });
+      }
+    };
+
+    function cargarEdicion(id) {
+      fetch(API_URL + "/libros/" + id)
+        .then(r => r.json())
+        .then(libro => {
+          editLibroId = libro.id;
+          document.getElementById('form-title').textContent = "Editar Libro";
+          document.getElementById('submit-btn').textContent = "Actualizar";
+          document.getElementById('cancel-btn').style.display = "inline-block";
+          document.getElementById('titulo').value = libro.titulo || "";
+          document.getElementById('descripcion').value = libro.descripcion || "";
+          document.getElementById('portada').value = libro.portada || "";
+          document.getElementById('disponibilidad').value = libro.disponibilidad ? "true" : "false";
+          document.getElementById('tipo').value = libro.tipo || "";
+          document.getElementById('categoriaId').value = libro.categoriaId || "";
+          document.getElementById('editorialId').value = libro.editorialId || "";
+          // Autores selección múltiple
+          const autoresSel = document.getElementById('autoresIds');
+          Array.from(autoresSel.options).forEach(opt => {
+            opt.selected = (libro.autoresIds || []).includes(parseInt(opt.value));
+          });
+          document.getElementById('form-msg').style.display = "none";
+          document.getElementById('form-err').style.display = "none";
+        });
+    }
+    document.getElementById('cancel-btn').onclick = resetForm;
+
+    function resetForm() {
+      editLibroId = null;
+      document.getElementById('form-title').textContent = "Agregar Libro";
+      document.getElementById('submit-btn').textContent = "Agregar";
+      document.getElementById('cancel-btn').style.display = "none";
+      document.getElementById('crud-form').reset();
+      Array.from(document.getElementById('autoresIds').options).forEach(opt => opt.selected = false);
+      document.getElementById('form-msg').style.display = "none";
+      document.getElementById('form-err').style.display = "none";
+    }
+
+    function eliminarLibro(id) {
+      if (!confirm("¿Está seguro de eliminar este libro?")) return;
+      fetch(API_URL + "/libros/" + id, { method: "DELETE" })
+        .then(r => {
+          if (!r.ok && r.status !== 204) throw new Error();
+          listarLibros();
+        })
+        .catch(() => alert("No se pudo eliminar el libro."));
+    }
+
+    // --------- Agregar Autor/Editorial/Categoría ---------
+    function agregarAux(tipo) {
+      let nombre, endpoint;
+      if (tipo === 'autor') {
+        nombre = document.getElementById('autor-nombre').value.trim();
+        endpoint = "/autores";
+      } else if (tipo === 'editorial') {
+        nombre = document.getElementById('editorial-nombre').value.trim();
+        endpoint = "/editoriales";
+      } else if (tipo === 'categoria') {
+        nombre = document.getElementById('categoria-nombre').value.trim();
+        endpoint = "/categorias";
+      }
+      document.getElementById('aux-msg').style.display = "none";
+      document.getElementById('aux-err').style.display = "none";
+      if (!nombre) {
+        document.getElementById('aux-err').textContent = "Ingrese un nombre válido";
+        document.getElementById('aux-err').style.display = "block";
+        return;
+      }
+      fetch(API_URL + endpoint, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ nombre })
+      })
+      .then(r => {
+        if (!r.ok) throw new Error();
+        document.getElementById('aux-msg').textContent = "¡Agregado correctamente!";
+        document.getElementById('aux-msg').style.display = "block";
+        document.getElementById('aux-err').style.display = "none";
+        document.getElementById(tipo + '-nombre').value = "";
+        cargarOpcionesAuxiliares();
+      })
+      .catch(() => {
+        document.getElementById('aux-err').textContent = "No se pudo agregar.";
+        document.getElementById('aux-err').style.display = "block";
+      });
+    }
+
+    // --------- Inicialización ---------
+    cargarOpcionesAuxiliares();
+    listarLibros();
+
+  </script>
+</body>
+</html>
