@@ -6,44 +6,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --primary-green: #26b364;
-      --dark-green: #1c7c44;
-      --light-green: #e6f4ec;
+      --black-bg: #181818;
+      --card-bg: #232323;
+      --card-border: #333;
       --white: #fff;
-      --gray: #f2f2f2;
-      --gray-disabled: #bcbcbc;
-      --red: #e63946;
+      --gray: #bcbcbc;
+      --gray-light: #eaeaea;
+      --accent: #bcbcbc;
+      --danger: #e63946;
     }
     body {
       margin: 0;
       padding: 0;
       min-height: 100vh;
       font-family: 'Segoe UI', 'Arial', sans-serif;
-      background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+      background: var(--black-bg);
       display: flex;
       align-items: flex-start;
       justify-content: center;
     }
     .container {
-      background: var(--white);
+      background: var(--card-bg);
       border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(38, 179, 100, 0.13);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.13);
       width: 99vw;
       max-width: 990px;
       margin: 40px auto;
       min-height: 500px;
       padding: 2rem 2.5rem 2.2rem 2.5rem;
       overflow: hidden;
+      border: 1px solid var(--card-border);
     }
     h2 {
-      color: var(--primary-green);
+      color: var(--white);
       text-align: center;
       margin-bottom: 1.4rem;
       font-weight: 700;
       letter-spacing: 1px;
     }
     .action-btn {
-      background: var(--primary-green);
+      background: var(--accent);
       color: var(--white);
       border: none;
       border-radius: 8px;
@@ -56,7 +58,7 @@
       transition: background 0.2s;
     }
     .action-btn:hover {
-      background: var(--dark-green);
+      background: #444;
     }
     .crud-table {
       width: 100%;
@@ -64,23 +66,23 @@
       margin-bottom: 2.5rem;
     }
     .crud-table th, .crud-table td {
-      border: 1px solid var(--gray);
+      border: 1px solid var(--card-border);
       padding: 0.7rem 0.5rem;
       text-align: left;
       font-size: 1rem;
     }
     .crud-table th {
-      background: var(--light-green);
-      color: var(--primary-green);
+      background: #222;
+      color: var(--white);
       font-weight: 700;
     }
     .crud-table td {
-      background: #fff;
-      color: #263238;
+      background: var(--card-bg);
+      color: var(--white);
       vertical-align: top;
     }
     .crud-table tr:nth-child(even) td {
-      background: #f7faf7;
+      background: #222;
     }
     .edit-btn, .delete-btn {
       padding: 0.35rem 0.9rem;
@@ -93,31 +95,32 @@
       transition: background 0.16s;
     }
     .edit-btn {
-      background: var(--primary-green);
+      background: var(--accent);
       color: #fff;
     }
     .edit-btn:hover {
-      background: var(--dark-green);
+      background: #444;
     }
     .delete-btn {
-      background: var(--red);
+      background: var(--danger);
       color: #fff;
     }
     .delete-btn:hover {
       background: #a12832;
     }
     .crud-form-section {
-      background: var(--light-green);
+      background: #222;
       border-radius: 12px;
       padding: 1.3rem 1.4rem 1.2rem 1.4rem;
       margin-bottom: 1.6rem;
       max-width: 550px;
       margin-left: auto;
       margin-right: auto;
+      border: 1px solid var(--card-border);
     }
     .crud-form-section h3 {
       margin-top: 0;
-      color: var(--primary-green);
+      color: var(--white);
       text-align: center;
       margin-bottom: 0.8rem;
     }
@@ -128,7 +131,7 @@
     }
     .crud-form label {
       font-weight: 600;
-      color: var(--dark-green);
+      color: var(--accent);
       margin-bottom: 0.2rem;
     }
     .crud-form input[type="text"],
@@ -138,7 +141,8 @@
       padding: 0.7rem;
       border-radius: 8px;
       border: 1px solid var(--gray);
-      background: var(--white);
+      background: #222;
+      color: var(--white);
       font-size: 1rem;
       outline: none;
     }
@@ -168,8 +172,8 @@
       margin-top: 0.8rem;
       margin-bottom: 0.5rem;
     }
-    .success-msg { color: var(--primary-green); }
-    .error-msg { color: var(--red); }
+    .success-msg { color: var(--accent); }
+    .error-msg { color: var(--danger); }
     .multi-select-list {
       display: flex;
       flex-wrap: wrap;
@@ -177,7 +181,7 @@
       margin: 0.3rem 0 0.6rem 0;
     }
     .chip {
-      background: var(--primary-green);
+      background: var(--accent);
       color: #fff;
       border-radius: 14px;
       padding: 0.2em 0.8em 0.2em 0.8em;
@@ -188,16 +192,17 @@
     }
     /* Aux form */
     .aux-form-section {
-      background: var(--light-green);
+      background: #222;
       border-radius: 12px;
       padding: 1.2rem 1.2rem 1rem 1.2rem;
       margin-bottom: 1.6rem;
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
+      border: 1px solid var(--card-border);
     }
     .aux-form-section h4 {
-      color: var(--primary-green);
+      color: var(--white);
       text-align: center;
       margin-top: 0.2em;
       margin-bottom: 0.8em;
@@ -211,14 +216,15 @@
     }
     .aux-form label {
       font-weight: 600;
-      color: var(--dark-green);
+      color: var(--accent);
       margin-right: 0.4em;
     }
     .aux-form input[type="text"] {
       padding: 0.5rem;
       border-radius: 7px;
       border: 1px solid var(--gray);
-      background: var(--white);
+      background: #222;
+      color: var(--white);
       font-size: 1rem;
       outline: none;
       min-width: 160px;
@@ -226,7 +232,7 @@
     }
     .aux-btn {
       padding: 0.45rem 1.1rem;
-      background: var(--primary-green);
+      background: var(--accent);
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -237,7 +243,7 @@
       transition: background 0.2s;
     }
     .aux-btn:hover {
-      background: var(--dark-green);
+      background: #444;
     }
     @media (max-width: 700px) {
       .container { padding: 1.1rem; }

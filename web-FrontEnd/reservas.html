@@ -6,44 +6,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --primary-green: #26b364;
-      --dark-green: #1c7c44;
-      --light-green: #e6f4ec;
+      --black-bg: #181818;
+      --card-bg: #232323;
+      --card-border: #333;
       --white: #fff;
-      --gray: #f2f2f2;
-      --gray-disabled: #bcbcbc;
-      --red: #e63946;
+      --gray: #bcbcbc;
+      --gray-light: #eaeaea;
+      --accent: #bcbcbc;
+      --danger: #e63946;
     }
     body {
       margin: 0;
       padding: 0;
       min-height: 100vh;
       font-family: 'Segoe UI', 'Arial', sans-serif;
-      background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+      background: var(--black-bg);
       display: flex;
       align-items: flex-start;
       justify-content: center;
     }
     .container {
-      background: var(--white);
+      background: var(--card-bg);
       border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(38, 179, 100, 0.13);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.13);
       width: 99vw;
-      max-width: 860px;
+      max-width: 900px;
       margin: 40px auto;
       min-height: 500px;
       padding: 2rem 2.5rem 2.2rem 2.5rem;
       overflow: hidden;
+      border: 1px solid var(--card-border);
     }
     h2 {
-      color: var(--primary-green);
+      color: var(--white);
       text-align: center;
       margin-bottom: 1.1rem;
       font-weight: 700;
       letter-spacing: 1px;
     }
     .logout-btn {
-      background: var(--primary-green);
+      background: var(--accent);
       color: var(--white);
       border: none;
       border-radius: 8px;
@@ -57,14 +59,14 @@
       transition: background 0.2s;
     }
     .logout-btn:hover {
-      background: var(--dark-green);
+      background: #444;
     }
     .reserva-section {
       margin-bottom: 2.2rem;
     }
     .section-title {
       margin-top: 1.2rem;
-      color: var(--dark-green);
+      color: var(--white);
       font-size: 1.25rem;
       font-weight: 600;
       letter-spacing: 0.5px;
@@ -77,24 +79,24 @@
       justify-content: flex-start;
     }
     .reserva-card {
-      border: 1px solid var(--gray);
+      border: 1px solid var(--card-border);
       border-radius: 10px;
-      background: var(--light-green);
+      background: #222;
       padding: 1rem 1.1rem 1.1rem 1.1rem;
-      color: #263238;
+      color: var(--white);
       font-size: 1rem;
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
       min-width: 240px;
       max-width: 330px;
-      box-shadow: 0 2px 8px rgba(38, 179, 100, 0.09);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.09);
       position: relative;
     }
-    .reserva-card b { color: var(--primary-green); }
+    .reserva-card b { color: var(--accent); }
     .estado-pendiente {
       color: #fff;
-      background: var(--red);
+      background: var(--danger);
       border-radius: 7px;
       padding: 0.2em 0.7em;
       font-size: 1rem;
@@ -106,7 +108,7 @@
     }
     .estado-devuelto {
       color: #fff;
-      background: var(--primary-green);
+      background: #444;
       border-radius: 7px;
       padding: 0.2em 0.7em;
       font-size: 1rem;
@@ -117,7 +119,7 @@
       display: inline-block;
     }
     .devolver-btn {
-      background: var(--primary-green);
+      background: var(--accent);
       color: var(--white);
       border: none;
       border-radius: 8px;
@@ -130,24 +132,24 @@
       transition: background 0.2s;
     }
     .devolver-btn:hover {
-      background: var(--dark-green);
+      background: #444;
     }
     .devolver-btn[disabled] {
-      background: var(--gray-disabled);
+      background: #444;
       color: #fff;
       cursor: not-allowed;
       opacity: 0.8;
     }
     .libro-detalle {
       margin: 0.3rem 0 0.4rem 0.2rem;
-      color: #263238;
+      color: var(--gray);
       display: flex;
       flex-direction: column;
       gap: 0.10rem;
       font-size: 0.98rem;
     }
     .message {
-      color: var(--primary-green);
+      color: var(--accent);
       font-size: 1.12rem;
       font-weight: 500;
       text-align: center;
@@ -155,13 +157,13 @@
       margin-bottom: 1.6rem;
     }
     .error-message {
-      color: var(--red);
+      color: var(--danger);
       text-align: center;
       margin-top: 1rem;
       margin-bottom: 1.6rem;
     }
     .volver-btn {
-      background: var(--primary-green);
+      background: var(--accent);
       color: var(--white);
       border: none;
       border-radius: 8px;
@@ -174,7 +176,7 @@
       transition: background 0.2s;
     }
     .volver-btn:hover {
-      background: var(--dark-green);
+      background: #444;
     }
     @media (max-width: 600px) {
       .container { padding: 1.1rem; }

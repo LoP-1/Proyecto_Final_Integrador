@@ -1,0 +1,110 @@
+
+:root {
+  --black-bg: #181818;
+  --card-bg: #232323;
+  --card-border: #333;
+  --white: #fff;
+  --gray: #bcbcbc;
+  --gray-light: #eaeaea;
+  --accent: #bcbcbc;
+  --danger: #e63946;
+}
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  background: var(--black-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-container {
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+  width: 370px;
+  padding: 2.5rem 2.2rem 2rem 2.2rem;
+  transition: box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+}
+.auth-container h2 {
+  margin: 0 0 1.4rem 0;
+  color: var(--white);
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.auth-form input, .auth-form select {
+  padding: 0.8rem;
+  border-radius: 9px;
+  border: 1px solid var(--gray);
+  background: #222;
+  color: var(--white);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.auth-form input:focus, .auth-form select:focus {
+  border-color: var(--accent);
+}
+.auth-form button {
+  padding: 0.9rem;
+  border: none;
+  border-radius: 9px;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 1.08rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+  cursor: pointer;
+  margin-top: 0.2rem;
+  transition: background 0.2s;
+}
+.auth-form button:hover {
+  background: #444;
+}
+.toggle-link {
+  text-align: center;
+  color: var(--accent);
+  font-size: 0.98rem;
+  margin-top: 1.7rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.15s;
+  display: block;
+}
+.toggle-link:hover {
+  color: #fff;
+}
+.auth-error {
+  color: var(--danger);
+  font-size: 0.96rem;
+  text-align: center;
+  margin-bottom: -0.3rem;
+  margin-top: -0.5rem;
+  min-height: 1.2em;
+}
+.success {
+  color: var(--accent);
+  font-size: 0.98rem;
+  text-align: center;
+  margin-bottom: -0.3rem;
+  margin-top: -0.5rem;
+}
+/* Animation for switching forms */
+.fade-in {
+  animation: fadeIn 0.45s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px);}
+  to { opacity: 1; transform: translateY(0);}
+}

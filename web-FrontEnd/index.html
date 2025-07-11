@@ -6,36 +6,134 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --primary-green: #26b364;
-      --dark-green: #1c7c44;
-      --light-green: #e6f4ec;
+      --black-bg: #181818;
+      --header-bg: #222;
+      --header-text: #fff;
+      --card-bg: #232323;
+      --card-border: #333;
       --white: #fff;
-      --gray: #f2f2f2;
-      --gray-disabled: #bcbcbc;
+      --gray: #bcbcbc;
+      --gray-light: #eaeaea;
+      --accent: #bcbcbc;
+      --danger: #e63946;
     }
     body {
       margin: 0;
       padding: 0;
       min-height: 100vh;
       font-family: 'Segoe UI', 'Arial', sans-serif;
-      background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+      background: var(--black-bg);
       display: flex;
       align-items: flex-start;
       justify-content: center;
     }
     .container {
-      background: var(--white);
+      background: var(--card-bg);
       border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(38, 179, 100, 0.13);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.13);
       width: 99vw;
-      max-width: 860px;
+      max-width: 900px;
       margin: 40px auto;
-      min-height: 500px;
-      padding: 2rem 2.5rem 2.2rem 2.5rem;
+      min-height: 600px;
+      padding: 0;
       overflow: hidden;
+      border: 1px solid var(--card-border);
+    }
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 2.5rem 0.7rem 2.5rem;
+    }
+    .nav {
+      display: flex;
+      gap: 2.2rem;
+      align-items: center;
+    }
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--header-text);
+      font-size: 1.08rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 0.3rem 0.7rem;
+      border-radius: 7px;
+      transition: background 0.18s;
+    }
+    .nav-btn:hover {
+      background: #333;
+    }
+    .perfil {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1rem;
+    }
+    .perfil-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2px;
+    }
+    .perfil-label {
+      font-size: 0.82rem;
+      color: var(--header-text);
+    }
+    .buscador-section {
+      background: var(--header-bg);
+      padding: 1.2rem 2.5rem 1.2rem 2.5rem;
+      text-align: center;
+    }
+    .buscador-label {
+      color: var(--header-text);
+      font-size: 1.15rem;
+      margin-bottom: 0.7rem;
+      display: block;
+    }
+    .buscador-input {
+      width: 340px;
+      max-width: 90vw;
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1.08rem;
+      background: var(--gray);
+      margin-top: 0.3rem;
+    }
+    .categorias-row {
+      background: var(--gray-light);
+      display: flex;
+      gap: 2.2rem;
+      padding: 0.9rem 2.5rem;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 1.08rem;
+      font-weight: 500;
+      color: #444;
+      border-bottom: 1px solid #e0e0e0;
+      overflow-x: auto;
+    }
+    .categorias-row .categoria {
+      flex: 1;
+      text-align: center;
+      cursor: pointer;
+      padding: 0.3rem 0.7rem;
+      border-radius: 7px;
+      transition: background 0.18s, color 0.18s;
+    }
+    .categorias-row .categoria.active-cat {
+      background: #222;
+      color: #fff;
     }
     h2 {
-      color: var(--primary-green);
+      color: var(--white);
       text-align: center;
       margin-bottom: 1.6rem;
       font-weight: 700;
@@ -82,9 +180,9 @@
       margin-bottom: 2.2rem;
     }
     .libro-card {
-      background: var(--light-green);
+      background: var(--card-bg);
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(38, 179, 100, 0.09);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.09);
       width: 220px;
       padding: 1.1rem 1rem 1.2rem 1rem;
       display: flex;
@@ -92,18 +190,33 @@
       align-items: center;
       position: relative;
       transition: box-shadow 0.2s;
+      border: 1px solid var(--card-border);
     }
-    .libro-card img {
-      max-width: 100px;
-      max-height: 140px;
+    .libro-card .img-placeholder {
+      width: 100px;
+      height: 140px;
       border-radius: 6px;
       margin-bottom: 0.8rem;
-      background: #e7e7e7;
+      background: #444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+      font-size: 0.95rem;
       object-fit: cover;
+    }
+    .libro-card img {
+      width: 100px;
+      height: 140px;
+      border-radius: 6px;
+      margin-bottom: 0.8rem;
+      background: #444;
+      object-fit: cover;
+      display: block;
     }
     .libro-title {
       font-weight: 600;
-      color: var(--dark-green);
+      color: var(--white);
       text-align: center;
       font-size: 1.07rem;
       margin-bottom: 0.45rem;
@@ -111,19 +224,19 @@
     }
     .libro-desc {
       font-size: 0.98rem;
-      color: #494949;
+      color: var(--gray);
       margin-bottom: 0.6rem;
       min-height: 2.7em;
       text-align: center;
     }
     .libro-meta {
-      color: #666;
+      color: #888;
       font-size: 0.92rem;
       margin-bottom: 0.5rem;
       text-align: center;
     }
     .seleccionar-btn {
-      background: var(--primary-green);
+      background: var(--accent);
       color: var(--white);
       border: none;
       border-radius: 8px;
@@ -135,14 +248,14 @@
       margin-top: 0.4rem;
     }
     .seleccionar-btn[disabled], .seleccionar-btn.disabled {
-      background: var(--gray-disabled);
+      background: #444;
       color: #fff;
       cursor: not-allowed;
       opacity: 0.8;
     }
     .estado-pendiente {
       color: #fff;
-      background: #e63946;
+      background: var(--danger);
       border-radius: 7px;
       padding: 0.2em 0.7em;
       font-size: 0.935rem;
@@ -153,7 +266,7 @@
     }
     .estado-disponible {
       color: #fff;
-      background: var(--primary-green);
+      background: #444;
       border-radius: 7px;
       padding: 0.2em 0.7em;
       font-size: 0.935rem;
@@ -217,7 +330,7 @@
       border: none;
       border-radius: 8px;
       background: var(--primary-green);
-      color: var(--white);
+      color: var(--black);
       font-size: 1.04rem;
       font-weight: 600;
       margin-top: 0.5rem;
@@ -242,13 +355,28 @@
     }
   </style>
 </head>
-<body>
-  
+  <body>
   <div class="container">
-    <h1>Biblioteca Municipal</h1>
-    <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
-    <button class="reservas-btn" onclick="window.location='reservas.html'">Mis Reservas</button>
-    <h2>Listado de Libros</h2>
+    <div class="header">
+      <div class="nav">
+        <button class="nav-btn" onclick="window.location='index.html'">Inicio</button>
+        <button class="nav-btn" onclick="window.location='reservas.html'">Mis reservas</button>
+      </div>
+      <div class="perfil">
+        <a href="perfil.html"><div class="perfil-img"></div></a>
+        <a href="perfil.html"><span class="perfil-label">Perfil</span></a>
+      </div>
+      
+    </div>
+    <div class="buscador-section">
+      <span class="buscador-label">Buscar Libros</span>
+      <input type="text" class="buscador-input" placeholder="Buscar..." />
+    </div>
+    <div class="categorias-row" id="categorias-row">
+      <div class="categoria" data-categoriaid="TODAS">Todas</div>
+      <!-- Categorías dinámicas -->
+    </div>
+    <h2 style="margin:1.6rem 0 1.2rem 0;">Listado de Libros</h2>
     <div id="libro-list" class="libro-list"></div>
   </div>
   <!-- Modal para reserva -->
@@ -272,42 +400,88 @@
       window.location.href = 'auth.html';
     }
 
-    // ----------- Mostrar Libros -----------
+    // ----------- Mostrar Libros y Categorías -----------
     const libroList = document.getElementById('libro-list');
     let librosGlobal = [];
+    let librosFiltrados = [];
+    let categoriasGlobal = [];
+    function renderLibros(libros) {
+      libroList.innerHTML = '';
+      if (!libros.length) {
+        libroList.innerHTML = "<p style='text-align:center;width:100%;color:#888;'>No hay libros disponibles.</p>";
+        return;
+      }
+      libros.forEach(libro => {
+        let estado = libro.estado || (libro.disponibilidad === false ? "PENDIENTE" : "DISPONIBLE");
+        let estadoHtml = estado === "PENDIENTE"
+          ? `<div class='estado-pendiente'>PENDIENTE</div>`
+          : `<div class='estado-disponible'>DISPONIBLE</div>`;
+        let portadaHtml = libro.portada
+          ? `<img src='${libro.portada}' alt='portada'>`
+          : `<div class='img-placeholder'>Sin portada</div>`;
+        libroList.innerHTML += `
+          <div class='libro-card'>
+            ${portadaHtml}
+            <div class='libro-title'>${libro.titulo}</div>
+            <div class='libro-desc'>${libro.descripcion || ''}</div>
+            <div class='libro-meta'>Categoría: ${libro.categoriaNombre} | ID: ${libro.id} | ${libro.tipo || ''}</div>
+            ${estadoHtml}
+            <button class='seleccionar-btn'
+              onclick='abrirReserva(${libro.id})'
+              ${estado === "PENDIENTE" ? "disabled class='disabled seleccionar-btn'" : ''}>
+              Reservar
+            </button>
+          </div>
+        `;
+      });
+    }
     fetch(API_URL + '/api/libros')
       .then(res => res.json())
       .then(libros => {
         librosGlobal = libros;
-        libroList.innerHTML = '';
-        if (!libros.length) {
-          libroList.innerHTML = "<p style='text-align:center;width:100%'>No hay libros disponibles.</p>";
-          return;
-        }
-        libros.forEach(libro => {
-          let estado = libro.estado || (libro.disponibilidad === false ? "PENDIENTE" : "DISPONIBLE");
-          let estadoHtml = estado === "PENDIENTE"
-            ? `<div class="estado-pendiente">PENDIENTE</div>`
-            : `<div class="estado-disponible">DISPONIBLE</div>`;
-          libroList.innerHTML += `
-            <div class="libro-card">
-              <img src="${libro.portada || 'https://via.placeholder.com/100x140?text=Sin+portada'}" alt="portada">
-              <div class="libro-title">${libro.titulo}</div>
-              <div class="libro-desc">${libro.descripcion || ''}</div>
-              <div class="libro-meta">ID: ${libro.id} | ${libro.tipo || ''}</div>
-              ${estadoHtml}
-              <button class="seleccionar-btn"
-                onclick="abrirReserva(${libro.id})"
-                ${estado === "PENDIENTE" ? 'disabled class="disabled seleccionar-btn"' : ''}>
-                Reservar
-              </button>
-            </div>
-          `;
-        });
+        librosFiltrados = libros;
+        renderLibros(librosFiltrados);
       })
       .catch(() => {
         libroList.innerHTML = "<p style='color:#e63946;text-align:center;'>Error al cargar libros</p>";
       });
+    // Buscador frontend
+    document.querySelector('.buscador-input').addEventListener('input', function(e) {
+      const valor = e.target.value.toLowerCase();
+      librosFiltrados = librosGlobal.filter(libro => libro.titulo.toLowerCase().includes(valor));
+      renderLibros(librosFiltrados);
+    });
+    // Obtener categorías y mostrarlas
+    fetch(API_URL + '/api/categorias')
+      .then(res => res.json())
+      .then(categorias => {
+        categoriasGlobal = categorias;
+        const row = document.getElementById('categorias-row');
+        // Eliminar categorías estáticas excepto "Todas"
+        row.innerHTML = '<div class="categoria" data-categoriaid="TODAS">Todas</div>';
+        categorias.forEach(cat => {
+          const btn = document.createElement('div');
+          btn.className = 'categoria';
+          btn.textContent = cat.nombre;
+          btn.setAttribute('data-categoriaid', cat.id);
+          row.appendChild(btn);
+        });
+      });
+    // Evento para filtrar por categoriaId
+    document.getElementById('categorias-row').addEventListener('click', function(e) {
+      if (e.target.classList.contains('categoria')) {
+        const catId = e.target.getAttribute('data-categoriaid');
+        if (catId === 'TODAS') {
+          librosFiltrados = librosGlobal;
+        } else {
+          librosFiltrados = librosGlobal.filter(libro => String(libro.categoriaId) === String(catId));
+        }
+        renderLibros(librosFiltrados);
+        // Resaltar categoría activa
+        Array.from(this.children).forEach(btn => btn.classList.remove('active-cat'));
+        e.target.classList.add('active-cat');
+      }
+    });
 
     // ----------- Reserva Modal -----------
     let libroSeleccionadoId = null;
@@ -382,5 +556,6 @@
       if (e.target === this) closeModal();
     });
   </script>
+  
 </body>
 </html>
